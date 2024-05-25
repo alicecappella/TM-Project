@@ -35,7 +35,11 @@ ggplot(data,aes(x = charges)) +
   geom_density(col = paletteer_c("ggthemes::Classic Blue",6)[2],
                fill = paletteer_c("ggthemes::Classic Blue",6)[2],
                alpha = 0.3,size = 0.8) +
-  theme_minimal()
+  labs(x = "Spese mediche",y = "Densità") +
+  theme_minimal() +
+  theme(text = element_text(family = "CMUSerif"),
+        axis.text = element_text(size = 15),
+        axis.title = element_text(size = 15))
 
 #Boxplot di charges divisa per smoker
 ggplot(data,aes(y = charges,x = smoker)) + 
@@ -152,15 +156,12 @@ fviz_mclust_bic(mbc,legend = "right",shape = "model",size = 1,
                 palette = paletteer_c("ggthemes::Classic Blue",6)[c(2,4)]) +
   labs(x = "Numero di componenti") +
   theme(legend.title = element_blank(),
-        legend.text = element_text(size = 15),
+        legend.text = element_text(size = 30),
         legend.key.size = unit(1.5,'cm'),
-        axis.title = element_text(size = 15),
-        axis.text = element_text(size = 15),
+        axis.title = element_text(size = 30),
+        axis.text = element_text(size = 30),
         title = element_blank(),
-        text = element_text(family = "CMUSerif"),
-        plot.background = element_rect(fill = "transparent",colour = NA),
-        panel.background = element_rect(fill = "transparent",colour = NA),
-        legend.background = element_rect(fill = "transparent",colour = NA))
+        text = element_text(family = "CMUSerif"))
 
 #Grafico distribuzione osservata e stimata
 df = data.frame(charges = data$charges,
