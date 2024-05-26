@@ -14,21 +14,10 @@ font_add("CMUSerif",font_path)
 showtext_auto()
 
 #Analisi esplorativa  ----------------------------------------------------
-#Grafico di charges all'aumentare dell'età
 library(ggplot2)
 library(paletteer)
-ggplot(data,aes(x = age,y = charges)) + 
-  stat_summary(fun = mean,geom = "line",
-               col = paletteer_c("ggthemes::Classic Blue",6)[4],size = 1) +
-  stat_summary(fun.data = mean_cl_normal,geom = "ribbon",
-               fill = paletteer_c("ggthemes::Classic Blue",6)[2],alpha = 0.5) +
-  labs(x = "Età",y = "Spese mediche") +
-  theme_minimal() + 
-  theme(text = element_text(family = "CMUSerif"),
-        axis.text = element_text(size = 15),
-        axis.title = element_text(size = 15))
 
-#Visualizziamo la distribuzione della variabile charges
+#Distribuzione della variabile charges
 ggplot(data,aes(x = charges)) + 
   geom_histogram(aes(y = ..density..),bins = 30,
                  fill = paletteer_c("ggthemes::Classic Blue",6)[4],col = "white") + 
@@ -37,16 +26,6 @@ ggplot(data,aes(x = charges)) +
                alpha = 0.3,size = 0.8) +
   labs(x = "Spese mediche",y = "Densità") +
   theme_minimal() +
-  theme(text = element_text(family = "CMUSerif"),
-        axis.text = element_text(size = 15),
-        axis.title = element_text(size = 15))
-
-#Boxplot di charges divisa per smoker
-ggplot(data,aes(y = charges,x = smoker)) + 
-  geom_boxplot(fill = paletteer_c("ggthemes::Classic Blue",6)[4],
-               col = paletteer_c("ggthemes::Classic Blue",6)[2]) +
-  labs(x = "Sesso",y = "Spese mediche") +
-  theme_minimal() + 
   theme(text = element_text(family = "CMUSerif"),
         axis.text = element_text(size = 15),
         axis.title = element_text(size = 15))
@@ -76,9 +55,71 @@ cor_melted %>%
         legend.title = element_text(size = 15),
         legend.key.size = unit(1,"cm")) 
 
+#Spese mediche all'aumentare dell'età
+ggplot(data,aes(x = age,y = charges)) + 
+  stat_summary(fun = mean,geom = "line",
+               col = paletteer_c("ggthemes::Classic Blue",6)[4],size = 1) +
+  stat_summary(fun.data = mean_cl_normal,geom = "ribbon",
+               fill = paletteer_c("ggthemes::Classic Blue",6)[2],alpha = 0.5) +
+  labs(x = "Età",y = "Spese mediche") +
+  theme_minimal() + 
+  theme(text = element_text(family = "CMUSerif"),
+        axis.text = element_text(size = 15),
+        axis.title = element_text(size = 15))
+
+#Indice di associazione eta^2
+eta2 = function(x,y) {
+  m = mean(x,na.rm = TRUE)
+  sct = sum((x - m)^2,na.rm = TRUE)
+  n = table(y)
+  mk = tapply(x,y,mean,na.rm = TRUE)
+  sce = sum(n * (mk - m)^2)
+  return(ifelse(sct > 0,sce / sct,0))
+}
+
+var_qualitative = names(data)[sapply(data,is.factor)]
+eta2_results = sapply(var_qualitative,function(var) {
+  eta2(data$charges,data[[var]])
+})
+eta2_df = data.frame(variabile = names(eta2_results),eta2 = eta2_results)
+eta2_df
+
+library(latex2exp)
+eta2_df %>%
+  arrange(desc(eta2)) %>% 
+  ggplot(aes(x = reorder(variabile,eta2),y = eta2,fill = eta2)) +
+  geom_bar(stat = "identity",width = 0.6) +
+  scale_fill_paletteer_c(`"ggthemes::Classic Blue"`) +
+  labs(x = "",y = TeX(sprintf("$\\eta^2$")),fill = TeX(sprintf("$\\eta^2$"))) +
+  coord_flip() +
+  theme_minimal() +
+  theme(text = element_text(family = "CMUSerif"),
+        axis.text = element_text(size = 10),
+        axis.title = element_text(size = 10),
+        legend.title = element_text(size = 10),
+        legend.text = element_text(size = 10),
+        legend.key.size = unit(1,"cm"))
+
+#Boxplot di charges divisa per smoker
+ggplot(data,aes(y = charges,x = smoker)) + 
+  geom_boxplot(fill = paletteer_c("ggthemes::Classic Blue",6)[4],
+               col = paletteer_c("ggthemes::Classic Blue",6)[6]) +
+  labs(x = "Sesso",y = "Spese mediche") +
+  theme_minimal() + 
+  theme(text = element_text(family = "CMUSerif"),
+        axis.text = element_text(size = 10),
+        axis.title = element_text(size = 10))
+
 #Trasformazione variabili in fattori
 data2 = data
-#Riclassifichiamo in classi l'età 18-24, 25-34, 35-49, 50-64
+ggplot(data,aes(y = charges,x = smoker)) + 
+  geom_boxplot(fill = paletteer_c("ggthemes::Classic Blue",6)[4],
+               col = paletteer_c("ggthemes::Classic Blue",6)[6]) +
+  labs(x = "Sesso",y = "Spese mediche") +
+  theme_minimal() + 
+  theme(text = element_text(family = "CMUSerif"),
+        axis.text = element_text(size = 10),
+        axis.title = element_text(size = 10))#Riclassifichiamo in classi l'età 18-24, 25-34, 35-49, 50-64
 data2$age = cut(data2$age,
                 breaks = c(18,25,35,50,65),
                 labels = c("18-24","25-34","35-49","50-64"),
@@ -91,6 +132,15 @@ data2$bmi = cut(data2$bmi,
                 right = F)
 table(data2$bmi)
 
+#Spese mediche all'aumentare del numero di figli
+ggplot(data,aes(x = children)) +
+  geom_bar(fill = paletteer_c("ggthemes::Classic Blue",6)[4]) +
+  labs(x = "Numero di figli",y = "Frequenza") +
+  scale_x_continuous(breaks = 0:5) +
+  theme_minimal() +
+  theme(text = element_text(family = "CMUSerif"),
+        axis.text = element_text(size = 10),
+        axis.title = element_text(size = 10))
 #Raggruppiamo le modalità 3, 4 e 5 di children in 3+
 data2$children = cut(data2$children,
                      breaks = c(0,1,2,3,6),
@@ -99,15 +149,6 @@ data2$children = cut(data2$children,
 table(data2$children)
 
 #Indice eta^2 di associazione tra variabili categoriali e charges
-eta2 = function(x,y) {
-  m = mean(x,na.rm = TRUE)
-  sct = sum((x - m)^2,na.rm = TRUE)
-  n = table(y)
-  mk = tapply(x,y,mean,na.rm = TRUE)
-  sce = sum(n * (mk - m)^2)
-  return(ifelse(sct > 0,sce / sct,0))
-}
-
 var_qualitative = names(data2)[sapply(data2,is.factor)]
 
 eta2_results = sapply(var_qualitative,function(var) {
@@ -116,7 +157,6 @@ eta2_results = sapply(var_qualitative,function(var) {
 eta2_df = data.frame(variabile = names(eta2_results),eta2 = eta2_results)
 eta2_df
 
-library(latex2exp)
 eta2_df %>%
   arrange(desc(eta2)) %>% 
   ggplot(aes(x = reorder(variabile,eta2),y = eta2,fill = eta2)) +
@@ -132,9 +172,52 @@ eta2_df %>%
         legend.text = element_text(size = 15),
         legend.key.size = unit(1,"cm"))
 
+#Boxplot di charges divisa per bmi
+ggplot(data2,aes(y = charges,x = bmi)) + 
+  geom_boxplot(fill = paletteer_c("ggthemes::Classic Blue",6)[4],
+               col = paletteer_c("ggthemes::Classic Blue",6)[6]) +
+  labs(x = "BMI",y = "Spese mediche") +
+  theme_minimal() + 
+  theme(text = element_text(family = "CMUSerif"),
+        axis.text = element_text(size = 15),
+        axis.title = element_text(size = 15))
+
+#Boxplot di charges divisa per numero di figli
+ggplot(data2,aes(y = charges,x = children)) + 
+  geom_boxplot(fill = paletteer_c("ggthemes::Classic Blue",6)[4],
+               col = paletteer_c("ggthemes::Classic Blue",6)[6]) +
+  labs(x = "Numero di figli",y = "Spese mediche") +
+  theme_minimal() + 
+  theme(text = element_text(family = "CMUSerif"),
+        axis.text = element_text(size = 15),
+        axis.title = element_text(size = 15))
+
+#Boxplot di charges divisa per regione
+ggplot(data2,aes(y = charges,x = region)) +
+  geom_boxplot(fill = paletteer_c("ggthemes::Classic Blue",6)[4],
+               col = paletteer_c("ggthemes::Classic Blue",6)[6]) +
+  labs(x = "Regione",y = "Spese mediche") +
+  theme_minimal() + 
+  theme(text = element_text(family = "CMUSerif"),
+        axis.text = element_text(size = 15),
+        axis.title = element_text(size = 15))
+
+#Boxplot di charges divisa per sesso
+ggplot(data,aes(y = charges,x = sex)) + 
+  geom_boxplot(fill = paletteer_c("ggthemes::Classic Blue",6)[4],
+               col = paletteer_c("ggthemes::Classic Blue",6)[6]) +
+  labs(x = "Sesso",y = "Spese mediche") +
+  theme_minimal() + 
+  theme(text = element_text(family = "CMUSerif"),
+        axis.text = element_text(size = 15),
+        axis.title = element_text(size = 15))
+
 #Regressione lineare -----------------------------------------------------
-lm0 = lm(log(charges) ~ .,data = data)
+lm0 = lm(charges ~ .,data = data)
 summary(lm0)
+
+lm0.log = lm(log(charges) ~ .,data = data)
+summary(lm0.log)
 #Tutte le variabili risultano significative
 
 # Model-based clustering - mclust -----------------------------------------
@@ -142,13 +225,6 @@ library(mclust)
 set.seed(123)
 mbc = Mclust(data$charges)
 summary(mbc)
-
-mbc[["BIC"]]
-
-AIC = c()
-for(i in 1:5){
-  AIC[i] = AIC(Mclust(data$charges,verbose = F,modelNames = "V",G = i))
-}
 
 #Grafico BIC (selezione del modello)
 library(factoextra)
@@ -162,6 +238,11 @@ fviz_mclust_bic(mbc,legend = "right",shape = "model",size = 1,
         axis.text = element_text(size = 30),
         title = element_blank(),
         text = element_text(family = "CMUSerif"))
+
+AIC = c()
+for(i in 1:5){
+  AIC[i] = AIC(Mclust(data$charges,verbose = F,modelNames = "V",G = i))
+}
 
 #Grafico distribuzione osservata e stimata
 df = data.frame(charges = data$charges,
@@ -241,6 +322,14 @@ data$latent_class = mbc[["classification"]]
 table(data$smoker,data$latent_class)
 
 #Significatività delle variabili nei cluster -----------------------------
+table(data %>%
+        filter(latent_class == 1) %>%
+        select(smoker))
+table(data %>%
+        filter(latent_class == 2) %>%
+        select(smoker))
+#cluster 1 e 2 non contengono fumatori
+
 lm1 = lm(charges ~ age + sex + bmi + children + region,
         data = data %>%
           filter(latent_class == 1))
@@ -332,6 +421,8 @@ ggarrange(plotlist = plot_list,ncol = 2,nrow = 3,
           common.legend = T,legend = "bottom")
 
 #Caratteristiche dei cluster ---------------------------------------------
+data2$latent_class = mbc[["classification"]]
+
 table(data2$age,data2$latent_class)
 table(data2$bmi,data2$latent_class)
 table(data2$children,data2$latent_class)
@@ -341,6 +432,8 @@ table(data2$sex,data2$latent_class)
 
 #Approfondimento ---------------------------------------------------------
 #Selezioniamo il modello con l'ICL
+data$latent_class = NULL
+
 set.seed(123)
 icl = mclustICL(data$charges)
 
@@ -445,9 +538,9 @@ lm2.2 = lm(charges ~ .,data = data %>%
              filter(mbc2[["classification"]] == 2))
 summary(lm2.2)
 
+#Caratteristiche dei cluster
 data2$latent_class2 = mbc2[["classification"]]
 
-#Caratteristiche dei cluster
 table(data2$age,data2$latent_class2)
 table(data2$bmi,data2$latent_class2)
 table(data2$children,data2$latent_class2)
