@@ -41,7 +41,7 @@ cor_melted %>%
   ggplot(aes(Var1,Var2,fill = value)) +
   geom_tile() +
   scale_fill_paletteer_c(`"ggthemes::Classic Blue"`) +
-  geom_text(aes(label = round(value,1)),family = "CMUSerif",size = 10) +
+  geom_text(aes(label = round(value,1)),family = "CMUSerif",size = 10,col = "white") +
   theme_minimal() +
   labs(fill = "Correlazione") +
   xlab("") + 
@@ -362,6 +362,7 @@ summary(lm5)
 # - l'intervallo di confidenza;
 # - la significatività 
 #per i modelli da lm1 a lm5
+library(forcats)
 coef.data_list = lapply(1:5,function(i){
   coef.data = data.frame(var = names(coef(get(paste0("lm",i)))[-1]),
                          coef = as.vector(coef(get(paste0("lm",i)))[-1]),
