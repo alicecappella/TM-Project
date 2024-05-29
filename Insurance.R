@@ -1,4 +1,3 @@
-setwd("C:/Users/alice/OneDrive - Università degli Studi di Padova/Laurea Magistrale/Secondo Anno/Temi e Metodi di Popolazione e Società/Lavoro di Gruppo/Misture")
 data = read.csv("insurance.csv")
 str(data)
 
