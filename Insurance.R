@@ -23,7 +23,7 @@ ggplot(data,aes(x = charges)) +
   geom_density(col = paletteer_c("ggthemes::Classic Blue",6)[2],
                fill = paletteer_c("ggthemes::Classic Blue",6)[2],
                alpha = 0.3,size = 0.8) +
-  labs(x = "Spese assicurative mediche",y = "Densità") +
+  labs(x = "Spese mediche",y = "Densità") +
   theme_minimal() +
   theme(text = element_text(family = "CMUSerif"),
         axis.text = element_text(size = 15),
@@ -48,19 +48,19 @@ cor_melted %>%
   coord_fixed()+
   theme(axis.text.x = element_text(angle = 45,hjust = 1),
         text = element_text(family = "CMUSerif"),
-        axis.title = element_text(size = 15),
-        axis.text = element_text(size = 15),
-        legend.text = element_text(size = 15),
-        legend.title = element_text(size = 15),
+        axis.title = element_text(size = 30),
+        axis.text = element_text(size = 30),
+        legend.text = element_text(size = 30,vjust = 1),
+        legend.title = element_text(size = 30,vjust = 1),
         legend.key.size = unit(1,"cm")) 
 
-#Spese assicurative mediche all'aumentare dell'età
+#Spese mediche all'aumentare dell'età
 ggplot(data,aes(x = age,y = charges)) + 
   stat_summary(fun = mean,geom = "line",
                col = paletteer_c("ggthemes::Classic Blue",6)[4],size = 1) +
   stat_summary(fun.data = mean_cl_normal,geom = "ribbon",
                fill = paletteer_c("ggthemes::Classic Blue",6)[2],alpha = 0.5) +
-  labs(x = "Età",y = "Spese assicurative mediche") +
+  labs(x = "Età",y = "Spese mediche") +
   theme_minimal() + 
   theme(text = element_text(family = "CMUSerif"),
         axis.text = element_text(size = 15),
@@ -103,7 +103,7 @@ eta2_df %>%
 ggplot(data,aes(y = charges,x = smoker)) + 
   geom_boxplot(fill = paletteer_c("ggthemes::Classic Blue",6)[4],
                col = paletteer_c("ggthemes::Classic Blue",6)[6]) +
-  labs(x = "Sesso",y = "Spese assicurative mediche") +
+  labs(x = "Sesso",y = "Spese mediche") +
   theme_minimal() + 
   theme(text = element_text(family = "CMUSerif"),
         axis.text = element_text(size = 10),
@@ -114,7 +114,7 @@ data2 = data
 ggplot(data,aes(y = charges,x = smoker)) + 
   geom_boxplot(fill = paletteer_c("ggthemes::Classic Blue",6)[4],
                col = paletteer_c("ggthemes::Classic Blue",6)[6]) +
-  labs(x = "Sesso",y = "Spese assicurative mediche") +
+  labs(x = "Sesso",y = "Spese mediche") +
   theme_minimal() + 
   theme(text = element_text(family = "CMUSerif"),
         axis.text = element_text(size = 10),
@@ -131,10 +131,10 @@ data2$bmi = cut(data2$bmi,
                 right = F)
 table(data2$bmi)
 
-#Spese assicurative mediche all'aumentare del numero di figli
+#Spese mediche all'aumentare del Numero di figli assicurati
 ggplot(data,aes(x = children)) +
   geom_bar(fill = paletteer_c("ggthemes::Classic Blue",6)[4]) +
-  labs(x = "Numero di figli",y = "Frequenza") +
+  labs(x = "Numero di figli assicurati",y = "Frequenza") +
   scale_x_continuous(breaks = 0:5) +
   theme_minimal() +
   theme(text = element_text(family = "CMUSerif"),
@@ -175,17 +175,17 @@ eta2_df %>%
 ggplot(data2,aes(y = charges,x = bmi)) + 
   geom_boxplot(fill = paletteer_c("ggthemes::Classic Blue",6)[4],
                col = paletteer_c("ggthemes::Classic Blue",6)[6]) +
-  labs(x = "BMI",y = "Spese assicurative mediche") +
+  labs(x = "BMI",y = "Spese mediche") +
   theme_minimal() + 
   theme(text = element_text(family = "CMUSerif"),
         axis.text = element_text(size = 15),
         axis.title = element_text(size = 15))
 
-#Boxplot di charges divisa per numero di figli
+#Boxplot di charges divisa per Numero di figli assicurati
 ggplot(data2,aes(y = charges,x = children)) + 
   geom_boxplot(fill = paletteer_c("ggthemes::Classic Blue",6)[4],
                col = paletteer_c("ggthemes::Classic Blue",6)[6]) +
-  labs(x = "Numero di figli",y = "Spese assicurative mediche") +
+  labs(x = "Numero di figli assicurati",y = "Spese mediche") +
   theme_minimal() + 
   theme(text = element_text(family = "CMUSerif"),
         axis.text = element_text(size = 15),
@@ -195,7 +195,7 @@ ggplot(data2,aes(y = charges,x = children)) +
 ggplot(data2,aes(y = charges,x = region)) +
   geom_boxplot(fill = paletteer_c("ggthemes::Classic Blue",6)[4],
                col = paletteer_c("ggthemes::Classic Blue",6)[6]) +
-  labs(x = "Regione",y = "Spese assicurative mediche") +
+  labs(x = "Regione",y = "Spese mediche") +
   theme_minimal() + 
   theme(text = element_text(family = "CMUSerif"),
         axis.text = element_text(size = 15),
@@ -205,7 +205,7 @@ ggplot(data2,aes(y = charges,x = region)) +
 ggplot(data,aes(y = charges,x = sex)) + 
   geom_boxplot(fill = paletteer_c("ggthemes::Classic Blue",6)[4],
                col = paletteer_c("ggthemes::Classic Blue",6)[6]) +
-  labs(x = "Sesso",y = "Spese assicurative mediche") +
+  labs(x = "Sesso",y = "Spese mediche") +
   theme_minimal() + 
   theme(text = element_text(family = "CMUSerif"),
         axis.text = element_text(size = 15),
@@ -261,16 +261,16 @@ ggplot(df,aes(x = charges,y = density)) +
                  fill = paletteer_c("ggthemes::Classic Blue",6)[4]) +
   geom_line(col = paletteer_c("ggthemes::Classic Blue",6)[2],size = 0.8) +
   geom_area(fill = paletteer_c("ggthemes::Classic Blue",6)[2],alpha = 0.3) +
-  labs(x = "Spese assicurative mediche",y = "Densità") +
+  labs(x = "Spese mediche",y = "Densità") +
   theme_minimal() + 
   theme(text = element_text(family = "CMUSerif"),
         axis.text = element_text(size = 15),
         axis.title = element_text(size = 15))
 
-#Grafici charges contro età, bmi e numero di figli divisi per cluster
+#Grafici charges contro età, bmi e Numero di figli assicurati divisi per cluster
 g1 = ggplot(data,aes(x = age,y = charges,col = factor(mbc[["classification"]]))) + 
   geom_point(size = 2) +
-  labs(x = "Età",y = "Spese assicurative mediche") +
+  labs(x = "Età",y = "Spese mediche") +
   scale_color_manual(values = paletteer_c("ggthemes::Classic Red-Blue",5),
                      label = paste("Cluster ",seq(1,5,1),sep = "")) +
   labs(col = " ") +
@@ -285,7 +285,7 @@ g1 = ggplot(data,aes(x = age,y = charges,col = factor(mbc[["classification"]])))
 
 g2 = ggplot(data,aes(x = bmi,y = charges,col = factor(mbc[["classification"]]))) +
   geom_point(size = 2) +
-  labs(x = "BMI",y = "Spese assicurative mediche") +
+  labs(x = "BMI",y = "Spese mediche") +
   scale_color_manual(values = paletteer_c("ggthemes::Classic Red-Blue",5),
                      label = paste("Cluster ",seq(1,5,1),sep = "")) +
   labs(col = " ") +
@@ -300,7 +300,7 @@ g2 = ggplot(data,aes(x = bmi,y = charges,col = factor(mbc[["classification"]])))
 
 g3 = ggplot(data,aes(x = children,y = charges,col = factor(mbc[["classification"]]))) +
   geom_point(size = 2) +
-  labs(x = "Numero di figli",y = "Spese assicurative mediche") +
+  labs(x = "Numero di figli assicurati",y = "Spese mediche") +
   scale_color_manual(values = paletteer_c("ggthemes::Classic Red-Blue",5),
                      label = paste("Cluster ",seq(1,5,1),sep = "")) +
   labs(col = " ") +
@@ -396,7 +396,8 @@ plot_list = lapply(1:5,function(i) {
       theme_minimal() +
       theme(text = element_text(family = "CMUSerif"),
             axis.text = element_text(size = 15),
-            axis.title = element_text(size = 15),
+            axis.title.x = element_text(size = 15),
+            axis.title.y = element_blank(),
             legend.text = element_text(size = 15))
   }
   else{
@@ -412,7 +413,8 @@ plot_list = lapply(1:5,function(i) {
       theme_minimal() +
       theme(text = element_text(family = "CMUSerif"),
             axis.text = element_text(size = 15),
-            axis.title = element_text(size = 15),
+            axis.title.x = element_text(size = 15),
+            axis.title.y = element_blank(),
             legend.text = element_text(size = 15))
   }
 })
@@ -449,6 +451,7 @@ ggplot(icl.df,aes(x = G,y = ICL,col = modelNames)) +
   scale_shape_manual(values = c(19,17),
                      labels = c("E","V")) +
   scale_color_manual(values = paletteer_c("ggthemes::Classic Blue",6)[c(2,4)]) +
+  scale_x_continuous(breaks = 1:9) +
   labs(x = "Numero di componenti",y = "ICL",shape = "",col = "") +
   theme_minimal() + 
   theme(text = element_text(family = "CMUSerif"),
@@ -475,16 +478,16 @@ ggplot(df2,aes(x = charges,y = density)) +
                  fill = paletteer_c("ggthemes::Classic Blue",6)[4]) +
   geom_line(col = paletteer_c("ggthemes::Classic Blue",6)[2],size = 0.8) +
   geom_area(fill = paletteer_c("ggthemes::Classic Blue",6)[2],alpha = 0.3) +
-  labs(x = "Spese assicurative mediche",y = "Densità") +
+  labs(x = "Spese mediche",y = "Densità") +
   theme_minimal() + 
   theme(text = element_text(family = "CMUSerif"),
         axis.text = element_text(size = 15),
         axis.title = element_text(size = 15))
 
-#Grafici charges contro età, bmi e numero di figli divisi per cluster
+#Grafici charges contro età, bmi e Numero di figli assicurati divisi per cluster
 g1 = ggplot(data,aes(x = age,y = charges,col = factor(mbc2[["classification"]]))) + 
   geom_point(size = 2) +
-  labs(x = "Età",y = "Spese assicurative mediche") +
+  labs(x = "Età",y = "Spese mediche") +
   scale_color_manual(values = paletteer_c("ggthemes::Classic Blue",6)[c(2,4)],
                      label = paste("Cluster ",seq(1,2,1),sep = "")) +
   labs(col = " ") +
@@ -499,7 +502,7 @@ g1 = ggplot(data,aes(x = age,y = charges,col = factor(mbc2[["classification"]]))
 
 g2 = ggplot(data,aes(x = bmi,y = charges,col = factor(mbc2[["classification"]]))) +
   geom_point(size = 2) +
-  labs(x = "BMI",y = "Spese assicurative mediche") +
+  labs(x = "BMI",y = "Spese mediche") +
   scale_color_manual(values = paletteer_c("ggthemes::Classic Blue",6)[c(2,4)],
                      label = paste("Cluster ",seq(1,2,1),sep = "")) +
   labs(col = " ") +
@@ -514,7 +517,7 @@ g2 = ggplot(data,aes(x = bmi,y = charges,col = factor(mbc2[["classification"]]))
 
 g3 = ggplot(data,aes(x = children,y = charges,col = factor(mbc2[["classification"]]))) +
   geom_point(size = 2) +
-  labs(x = "Numero di figli",y = "Spese assicurative mediche") +
+  labs(x = "Numero di figli assicurati",y = "Spese mediche") +
   scale_color_manual(values = paletteer_c("ggthemes::Classic Blue",6)[c(2,4)],
                      label = paste("Cluster ",seq(1,2,1),sep = "")) +
   labs(col = " ") +
