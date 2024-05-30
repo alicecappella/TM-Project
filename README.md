@@ -6,3 +6,5 @@ Vengono riportati:
 * il dataset `insurance.csv`;
 * il codice R utilizzato per l'analisi `Insurance.R`;
 * il file pdf `Insurance.pdf` contenente l'analisi commentata con codice R.
+
+**Data source**: https://github.com/stedy/Machine-Learning-with-R-datasets
