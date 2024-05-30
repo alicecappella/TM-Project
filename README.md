@@ -1,4 +1,4 @@
-Le caratteristiche degli individui, come l'età, il BMI (*Body Mass Index*) e l'abitudine al fumo, possono influenzare significativamente l'ammontare delle spese assicurative mediche.
+Le caratteristiche degli individui, come l'età, il BMI (*Body Mass Index*) e l'abitudine al fumo, possono influenzare significativamente l'ammontare delle spese mediche addebitate alle compagnie assicurative.
     
 Attraverso l’utilizzo di modelli di mistura Gaussiana, applicati al dataset `insurance.csv` relativo alle assicurazioni sanitarie di individui americani, questo studio mira ad identificare gruppi omogenei in relazione ai costi assicurativi e a valutare l'impatto di diverse variabili su tali costi.
 
